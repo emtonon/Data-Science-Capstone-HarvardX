@@ -1,0 +1,48 @@
+---
+title: "Video Game Recommendation System"
+subtitle: "HarvardX Data Science PH125.9x Capstone - Video Game"
+author: "Erik Martins Tonon"
+date: "September 2022"
+output: pdf_document
+number_sections: true
+toc: true
+bibliography: references.bib
+---
+
+
+```{r include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.align = "center")
+
+
+```
+
+```{r include=FALSE, cache = TRUE}
+#################### Data Sets #################### 
+#################### edX / Validation #################### 
+#################### Functions #################### 
+#################### Data set Mutation #################### 
+
+
+#Split train & test set by randomly selecting 10% of the **edx set**
+```
+
+\newpage
+
+# Introduction
+
+# Exploratory Analysis
+
+## Features
+
+# Methods
+
+## Naive 
+
+The naive model is the most simple and it predicts that the movies will have the same rating regardless of user, genre or movie and the estimate that minimizes the RMSE is the average of all ratings. 
+
+# Results
+
+# Conclusion
+
+# References
+
