@@ -1,18 +1,3 @@
----
-title: "Video Game Recommendation System"
-subtitle: "HarvardX Data Science PH125.9x Capstone - Video Game"
-author: "Erik Martins Tonon"
-date: "September 2022"
-output: 
-  pdf_document :
-    extra_dependencies: ["float"]
-number_sections: true
-toc: true
-bibliography: references.bib
----
-
-
-```{r include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, fig.align = "center", warning = FALSE)
 
 
@@ -26,9 +11,7 @@ if(!require(kableExtra)) install.packages("kableExtra")
 if(!require(dplyr)) install.packages("dplyr")
 if(!require(randomForest)) install.packages("randomForest")
 
-```
 
-```{r include=FALSE, cache = TRUE}
 
 #################### Libraries #################### 
 library(tidyverse)
@@ -50,28 +33,7 @@ vgsales_data <- read.csv(file = 'vgsales.csv')
 vgsales_data <- vgsales_data  %>%
   mutate(Year = as.numeric(Year))
 
-```
 
-\newpage
-
-# Introduction
-
-Video games have been around for some years now and it is remarkable how it has changed over the years. From hungry-yellow dots running away from ghosts to Virtual Reality headsets where you are fully immersed in another world. In the early times, people used to wait in line at Brookehaven National Laboratory to play Tennis for Two, an electronic tennis game that is unquestionably a forerunner of the modern video game era. (@brookhaven)
-
-In 2020, the revenue from the worldwide PC Gaming market was estimated at almost 37 U.S. billion dollars (@Clement_2021) and it is known that video games are also being introduced to different sectors through *'Gamefication'*, which by definition is simply applying game mechanics to increase user engagement.
-
-In this study, we are going to explore the different point of views of Video Game sales using Machine Learning algorithms. The goal of this project is to predict video game sales based on the dataset selected.
-
-Starting with exploratory analysis, the data set variables will be analyzed and with the insights gained, the appropriate machine learning method will be applied.
-
-
-# Exploratory Analysis
-
-The Video Game dataset has 16.598 observations with 11.493 unique video games and 11 variables such as Name of the game, Platform it was released, Year, Genre, Publisher and the Unit Sales in millions.
-
-As seen in the table 1 bellow, *'Wii Sports'* has sold around 41.49 million units in North America whereas *'Super Mario Bros'* sold approximately the same amount of units but globally.
-
-``` {r out.width = "60%", echo = FALSE}
 
 # Selecting the first 10 rows of the dataset.
 top10 <- head(vgsales_data, 10)
@@ -82,11 +44,7 @@ knitr::kable(top10, caption="First 10 rows of dataset.",
   kable_styling(latex_options = c("striped", "HOLD_position", "scale_down"),
                 position = "center")
 
-```
 
-On the other hand, table 2 shows the bottom 10 video games, and titles like *'Woody Woodpecker in Crazy Castle 5'* and *'Spirits & Spells'* have the lowest Global Sales.
-
-``` {r out.width = "60%", echo = FALSE}
 
 # Selecting the bottom 10 rows of the dataset.
 bottom10 <- tail(vgsales_data, 10)
@@ -98,13 +56,7 @@ knitr::kable(bottom10, caption="Bottom 10 rows of dataset.",
   kable_styling(latex_options = c("striped", "HOLD_position", "scale_down"),
                 position = "center")
 
-```
-\newpage
 
-## Name
-If we take a closer look to the variable *'$name'*, it is possible to see that the global unit sales in million per video game is still pretty high and consist mostly of titles from the publisher Nintendo, such as *'Mario Kart Wii'* and *'Duck Hunt'*.
-
-``` {r out.width = "60%", fig.cap="Top 10 Video Games", echo = FALSE}
 
 # Calculating the total unit sales per grouping by name and slicing only the top 10.
 top10name <- vgsales_data %>%
@@ -119,16 +71,7 @@ top10name <- vgsales_data %>%
 
 #Figure 1
 top10name
-```
 
-
-## Platform
-
-The variable *'$Platform'* shows us the platform responsible for launching these games, for example, *'Wii'* and *'PS4'* among 31 unique platforms available in the dataset.
-
-It is possible to analyze that, even though the average unit sales only presented *'Nintendo'* games at Figure 1, *'PS2'* and *'X360'* games are leading the sales with over 1200 Million unit sold as shown in Figure 2. 
-
-``` {r out.width = "60%", fig.cap="Top 10 Global Sales per Platform", echo = FALSE}
 
 #Sum of sales per Platform and slicing only the top 10.
 top10platform <- vgsales_data %>%
@@ -143,14 +86,7 @@ top10platform <- vgsales_data %>%
 
 #Figure 2
 top10platform
-```
 
-
-## Year
-
-The variable *'$Year'* contains the year the video game was released, from 1980 to 2020 releases, and bellow at Figure 3, we see that most games were released between 2000 and 2015 being 2008 the release year with the highest unit sales (Figure 4).
-
-``` {r out.width = "60%", fig.cap="Global Sales Unit per Release Year", echo = FALSE}
 
 #Plot of Sales units per year , excluding NAs.
 sales_year <- vgsales_data %>%
@@ -164,8 +100,6 @@ sales_year <- vgsales_data %>%
 
 #Figure 3
 sales_year
-```
-``` {r out.width = "60%", fig.cap="Top 10 Release Years with most Global Sales Unit", echo = FALSE}
 
 #Plot of Sales units per year , excluding NAs and slicing the top 10.
 top10year <- vgsales_data %>%
@@ -181,14 +115,7 @@ top10year <- vgsales_data %>%
 #Figure 4
 top10year
 
-```
-\newpage
 
-## Genre
-
-The variable *'$Genre'* contains 12 unique genres of the game, and as seen in Figure 5 below, in average, *'Platform'* games have the most units sold.
-
-``` {r out.width = "60%", fig.cap="Average Global Sales Unit per Genre", echo = FALSE}
 
 #Plot of Average Sales units per Genres.
 avg_genre <- vgsales_data %>%
@@ -203,11 +130,7 @@ avg_genre <- vgsales_data %>%
 #Figure 5
 avg_genre
 
-```
 
-While in average, *'Platform'* games have the most units sold, in total, *'Action'* games have more than 100 million units sold (Figure 6).
-
-``` {r out.width = "70%", fig.cap="Global Sales Unit per Genre", echo = FALSE}
 
 #Plot of Global Sales units per Genres that are higher than 25 mi.
 total_genre <- vgsales_data %>%
@@ -224,17 +147,7 @@ total_genre <- vgsales_data %>%
 #Figure 6
 total_genre
 
-```
 
-This demonstrates variance between genres and can potentially improve our algorithm.
-
-\newpage
-
-## Publisher
-
-The variable *'$Publisher'* contains 579 unique publishers and as presumed before, *'Nintendo'* has the most sold units followed by *'Electronic Arts'*.
-
-``` {r out.width = "60%", fig.cap="Global Sales Unit per Publisher", echo = FALSE}
 
 #Plot of Top 10 Total Sales units per Publishers
 publisher_sales <- vgsales_data %>%
@@ -250,13 +163,7 @@ publisher_sales <- vgsales_data %>%
 #Figure 7
 publisher_sales
 
-```
 
-## Sales Regions
-
-The variable *'$Sales Regions'* is split into 5 variables, 4 regions and 1 total, and analyzing each region individually we see that *'North America'* has led most of the sales around 2010, followed by *'Europe'*.
-
-``` {r out.width = "60%", fig.cap="Sales per Sales Region", echo = FALSE}
 
 #Sales Quantity per Region grouped by Year and analyzed individualy
 salesPerRegion <- vgsales_data %>%
@@ -282,12 +189,7 @@ salesPerRegion <- vgsales_data %>%
 #Figure 8
 salesPerRegion
 
-```
 
-
-\newpage
-
-```{r include=FALSE, cache = TRUE}
 
 ## Cleaning previous objects and the memory.
 rm(avg_genre, bottom10, publisher_sales, sales_year, salesPerRegion, top10, top10name, top10platform, top10year, total_genre)
@@ -329,17 +231,7 @@ y_test <- y[-index]
 rm(index)
 
 
-```
 
-# Methods
-
-The interpretation for RMSE is the typical error we make when predicting. If this number is larger than 1, it means our typical error is way off the reality, which is not good. (@irizarry_2020)
-
-## Naive Model
-
-The naive model predicts that the video games will have the same sales regardless of Name, Platform, Year, Genre, Publisher or Rank, and the estimate that minimizes the RMSE is the average of all sales. 
-
-```{r out.width = "60%", echo=FALSE }
 #Simple average over Global Sales
 mu_hat <- mean(y_train)
 
@@ -353,14 +245,7 @@ knitr::kable(rmse_results,
                booktabs = T) %>% 
   kable_styling(latex_options = c("striped", "HOLD_position"),
                 position = "center")
-```
-## Linear Regression
 
-Linear Regression estimates the relationship between independent variables and it is mostly used for finding out the relationship between the variables and the forecast (@geeksforgeeks).
-
-Initially, let's fit the linear model for the 'Platform + Year + Genre + Publisher' and check the results.
-
-```{r echo=TRUE }
 # Fiting the model
 set.seed(1)
 fit <- lm(y_train ~ Platform + Year + Genre + Publisher, data = x_train)
@@ -374,21 +259,13 @@ pred_rmse <- format(round(RMSE(y_test, y_hat),5), nsmall = 5)
 # Adding the results to rmse_results.
 rmse_results <- rmse_results %>%
   rbind(c("Linear Regression", pred_rmse))
-```
 
-And as seen below, the RMSE is slightly better than the simple average, which means our model lacks variability and the algorithm needs improvements.
-
-```{r out.width = "60%", echo=FALSE }
 knitr::kable(rmse_results, 
                booktabs = T) %>% 
   kable_styling(latex_options = c("striped", "HOLD_position"),
                 position = "center")
 
-```
 
-Fitting the algorithm using all the features available has reduced drastically the RMSE.
-
-```{r echo=FALSE }
 # Fiting the model
 set.seed(1)
 fit <- lm(y_train ~ ., data = x_train)
@@ -402,22 +279,13 @@ pred_rmse <- format(round(RMSE(y_test, y_hat),5), nsmall = 5)
 # Adding the results to rmse_results.
 rmse_results <- rmse_results %>%
   rbind(c("Linear Regression (All)", pred_rmse))
-```
 
-
-```{r out.width = "60%", echo=FALSE }
 knitr::kable(rmse_results, 
                booktabs = T) %>% 
   kable_styling(latex_options = c("striped", "HOLD_position"),
                 position = "center")
 
-```
 
-## Random Forest
-
-Random Forest is learning method that can be applied to various prediction tasks and can be used for regression and classification models. The essence of the model is a combination of decision trees.
-
-```{r echo=TRUE }
 # Fitting the random Forest
 set.seed(1)
 fit <- randomForest(x = x_train, y = y_train , maxnodes = 10, ntree = 10)
@@ -432,19 +300,12 @@ pred_rmse <- format(round(RMSE(y_test, predictions),5), nsmall = 5)
 rmse_results <- rmse_results %>%
   rbind(c("Random Forest Regression", pred_rmse))
 
-```
 
-The current model has returned a *'% Var explained'* of *'80.08%'*, but we can do better.
-```{r out.width = "60%", echo=FALSE }
 
 # Ploting the results for fit.
 fit
 
-```
 
-The scatter plot below shows that our prediction is really close to reality.
-
-``` {r out.width = "60%", fig.cap="Prediction vs Real", echo = FALSE}
 
 # Build scatter plot
 predvsactuals <- ggplot() + 
@@ -459,20 +320,12 @@ scale_color_identity(name = "Comparision",
 
 #Figure 9
 predvsactuals
-```
-\newpage
-And the accuracy of the Random Forest is *'0.30825'*: 
 
-```{r out.width = "60%", echo=FALSE }
 knitr::kable(rmse_results, 
                booktabs = T) %>% 
   kable_styling(latex_options = c("striped", "HOLD_position"),
                 position = "center")
-```
 
-As we have analyzed before in Figure 8, *'NA_Sales'* is the most important predictor from the train set. 
-
-``` {r out.width = "60%", fig.cap="Importance of Predictors", echo = FALSE}
 
 # Importance of variables
 importance <- importance(fit) 
@@ -492,14 +345,7 @@ predImp <- ggplot(varImportance, aes(x = reorder(Variables, Importance),
 #Figure 10
 predImp
 
-```
-\newpage
 
-## Random Forest Tunning
-
-Currently, our first Random Forest model is using 10 trees and a maximum number of terminal nodes of 10 too. After some exploration and testing, the best parameters for this set are 140 nodes and 1100 trees.
-
-```{r echo=TRUE }
 # Fitting the random Forest
 set.seed(1)
 fit <- randomForest(x = x_train, y = y_train , maxnodes = 140, ntree = 1100)
@@ -514,19 +360,11 @@ pred_rmse <- format(round(RMSE(y_test, predictions),5), nsmall = 5)
 rmse_results <- rmse_results %>%
   rbind(c("Random Forest Tunning", pred_rmse))
 
-```
 
-The current model has returned a '*% Var explained'* of *'96.87%'*, which is pretty good.
-
-```{r out.width = "60%", echo=FALSE }
 
 # Ploting the results for fit.
 fit
-```
 
-And now, the scatter plot below shows better results in comparison to the previous version.
-
-``` {r out.width = "60%", fig.cap="Prediction vs Real", echo = FALSE}
 
 # Build scatter plot
 predvsactuals <- ggplot() + 
@@ -541,39 +379,11 @@ predvsactuals <- ggplot() +
 
 #Figure 9
 predvsactuals
-```
-As seen below, after around 200 trees, the difference in errors gets smaller between the trees.
 
-``` {r out.width = "60%", fig.cap="Errors per tree", echo = FALSE}
 # Ploting the errors vs the trees.
 plot(fit)
-```
 
-And the accuracy of the Random Forest with tuning is *'0.13246'*: 
-  
-```{r out.width = "60%", echo=FALSE }
 knitr::kable(rmse_results, 
              booktabs = T) %>% 
   kable_styling(latex_options = c("striped", "HOLD_position"),
                 position = "center")
-```
-
-
-\newpage
-
-# Results
-
-The Linear Regression model has achieved the best results since the data set is pretty small, while the Random Forest model did a great job and presented similar outcome using 140 nodes and 1100 trees.
-
-Both models were able to predict the quantity of sales according to the test set with an acceptable RMSE.
-
-# Conclusion
-
-Given that the data set is pretty small and there are not many features, both models were acceptable but Linear Regression has given the best results for this study. We have seen the data, explored its features, identified some potential candidates for the algorithm and applied them.
-
-The naive model provided us with the base for understanding the goal, the Linear Regression has proven the best model, and Random Forests has shown great results as well.
-
-Having further information on regions and user profile, could improve this analysis.
-
-# References
-
